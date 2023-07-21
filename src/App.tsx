@@ -1,12 +1,14 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import './App.css';
+
 function getRandom(max: number, min: number) {
   return (Math.floor(Math.random() * (max - min)) + min) * 90;
 }
 
 const timing = 1 * 1000
 
-const data = [
+const data: Item[] = [
   {
     "question": "What is JavaScript?",
     "options": [
@@ -109,20 +111,22 @@ const data = [
   }
 ]
 
-function getRandomElementFromArray() {
-  if (data.length === 0) {
-    return null; // Return null if the array is empty
-  }
+function getRandomElementFromArray(): Item {
+  return data[Math.floor(Math.random() * data.length)];
+}
 
-  const randomIndex = Math.floor(Math.random() * data.length);
-  return data[randomIndex];
+interface Item {
+  question: string;
+  options: string[];
+  answer: number;
 }
 
 function App() {
 
-  const [question, setQuestion] = useState(getRandomElementFromArray())
+  const [question, setQuestion] = useState<Item | undefined>(undefined)
 
   const reGenerate = () => {
+    setQuestion(undefined)
     var x = getRandom(24, 3);
     var y = getRandom(24, 3);
 
@@ -175,14 +179,23 @@ function App() {
         </div>
       </div>
 
-      {question &&
-        <div className="absolute px-4 w-full max-w-4xl left-1/2 -translate-x-1/2 top-1/2 text-white">
-          <h2 className='text-4xl font-extrabold mb-6'>{question.question}</h2>
-          <ol className='list-decimal text-xl font-medium space-y-2 pl-6'>
-            {question.options.map((v, i) => <li key={i} className=''>{v}</li>)}
-          </ol>
-        </div>
-      }
+      <div className="max-w-4xl left-1/2 -translate-x-1/2 absolute px-4 w-full top-1/2 text-white">
+        <AnimatePresence>
+          {question &&
+            <motion.div
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 1 }}
+              exit={{ opacity: 0, x: -100 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h2 className='text-4xl font-extrabold mb-6'>{question.question}</h2>
+              <ol className='list-decimal text-xl font-medium space-y-2 pl-6'>
+                {question.options.map((v, i) => <li key={i} className=''>{v}</li>)}
+              </ol>
+            </motion.div>
+          }
+        </AnimatePresence>
+      </div>
     </div>
   )
 }
