@@ -6,7 +6,7 @@ function getRandom(max: number, min: number) {
   return (Math.floor(Math.random() * (max - min)) + min) * 90;
 }
 
-const timing = 1 * 1000
+const timing = 3 * 1000
 
 const data: Item[] = [
   {
