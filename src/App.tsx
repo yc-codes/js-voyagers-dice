@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { marked } from "marked";
 import "./App.css";
 
 function getRandom(max: number, min: number) {
@@ -174,9 +175,11 @@ function App() {
               </h2>
               <ol className="list-decimal grid grid-cols-2 text-2xl font-medium gap-6 pl-6">
                 {question.options.map((v, i) => (
-                  <li key={i} className="">
-                    {v}
-                  </li>
+                  <li
+                    key={i}
+                    className=""
+                    dangerouslySetInnerHTML={{ __html: marked(v) }}
+                  ></li>
                 ))}
               </ol>
             </motion.div>
